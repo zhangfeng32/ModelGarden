@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" 
+	   xmlns:context="http://www.springframework.org/schema/context" 
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:cache="http://www.springframework.org/schema/cache"   
+       xsi:schemaLocation="http://www.springframework.org/schema/beans   
+       http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+       http://www.springframework.org/schema/cache   
+        http://www.springframework.org/schema/cache/spring-cache.xsd
+       http://www.springframework.org/schema/context      
+       http://www.springframework.org/schema/context/spring-context-3.1.xsd">
+    
+  	<!-- 导入  --> 
+  	<context:property-placeholder location="classpath:spring-*.properties" />
+    
+    <!-- 包扫描注解 -->
+	<context:component-scan base-package="com.modelgarden" />
+	
+	<!-- 引入同文件夹下的redis属性配置文件 -->
+    <import resource="redis-context.xml"/>
+	
+	<!--创建数据源 -->
+    <bean id="modelDataSource" class="org.apache.commons.dbcp.BasicDataSource" 
+     	   destroy-method="close">
+       <property name="driverClassName" value="${modelgarden.driver}"/>
+       <property name="url" value="${modelgarden.url}"/>
+       <property name="username" value="${modelgarden.username}"/>
+       <property name="password" value="${modelgarden.password}"/>
+       <property name="initialSize" value="30"/>
+       <property name="maxActive" value="150"/>
+       <property name="maxIdle" value="5"/>
+       <property name="minIdle" value="20"/>
+    </bean>
+    
+    <!-- 集成mybatis -->  
+	<bean id="modelDBSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">  
+	    <property name="dataSource" ref="modelDataSource" />  
+	    <property name="configLocation" value="classpath:mybatis-config.xml" />  
+	</bean> 
+	
+	<!-- 安全鉴权 shiro 配置开始    -->
+	<!-- shiro redisManager -->
+	<bean id="redisManager" class="org.crazycake.shiro.RedisManager">
+	        <property name="host" value="${redis.host}"/>
+		    <property name="port" value="${redis.port}"/>
+		    <property name="expire" value="1800"/>
+	</bean>
+	<!-- cacheManager -->
+	<bean id="cacheManager" class="org.crazycake.shiro.RedisCacheManager">
+	    <property name="redisManager" ref="redisManager" />
+	</bean>
+	<!-- redisSessionDAO -->
+	<bean id="redisSessionDAO" class="org.crazycake.shiro.RedisSessionDAO">
+	    <property name="redisManager" ref="redisManager" />
+	</bean>
+	<!-- sessionManager -->
+	<bean id="sessionManager" class="org.apache.shiro.web.session.mgt.DefaultWebSessionManager">
+	    <property name="sessionDAO" ref="redisSessionDAO" />
+	</bean>
+	
+	<!-- 安全管理器 --> 
+	<bean id="securityManager"
+		class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
+   		 <property name="sessionManager" ref="sessionManager" />
+		<property name="realm" ref="shiroDbRealm" />
+		<property name="cacheManager" ref="cacheManager" /> 
+	</bean>
+	<!-- 数据库鉴权规则 -->
+	<bean id="dbCredentialsMatcher" class="com.modelgarden.filter.realm.DbCredentialsMatcher">
+    </bean>
+    <!-- 数据库鉴权实现 -->
+    <bean id="shiroDbRealm" class="com.modelgarden.filter.realm.ShiroDbRealm" >
+    	 <property name="credentialsMatcher" ref="dbCredentialsMatcher" />
+    </bean>
+    <!-- shiro认证过滤器 -->
+    <bean id="shiroAuthcFilter" class="com.modelgarden.filter.ShiroFilter">
+    </bean>
+    <!-- shiro鉴权过滤器 -->
+	<bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
+		<property name="securityManager" ref="securityManager"/>
+		<property name="loginUrl" value="/login"/>
+		<property name="filters">
+	      <map>
+	        <entry key="authc" value-ref="shiroAuthcFilter"></entry>
+	      </map>
+	    </property>
+		<property name="filterChainDefinitions">
+		    <value>
+	          	/** = anon
+		    </value>
+		 </property>
+	</bean>
+	
+	<!-- Bean生命周期管理 -->
+  	<bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor"/>
+  	
+	<!-- 开启Shiro的注解(如@RequiresRoles，@RequiresPermissions),
+	          需借助SpringAOP扫描使用Shiro注解的类，并在必要时进行安全逻辑验证 -->
+	<bean class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator"
+		  depends-on="lifecycleBeanPostProcessor" />		
+	<bean class="org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor">  
+	    <property name="securityManager" ref="securityManager"/>  
+	  </bean>
+	 
+	<!-- 定义默认的异常处理页面 -->  
+	<bean class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
+		<property name="exceptionMappings">
+			<props>
+				<prop key="org.apache.shiro.authz.UnauthorizedException">/system/unauth_error</prop>
+			</props>
+		</property>
+	</bean>
+	<!-- shiro 配置结束   -->
+
+</beans>  

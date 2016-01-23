@@ -1,0 +1,162 @@
+html{
+padding: 0px;
+margin: 0px
+}
+
+body{
+padding: 0px;
+margin: 0px
+text-align:left;
+color:#707070;
+font-family: 'Microsoft YaHei',Arial,Helvetica,'宋体';
+font-size: 12px;
+}
+
+.regCon{
+width:100%;
+}
+
+.lineOne{
+position: relative;
+height: 90px;
+background: #f2f2f2;
+display: box;
+display: -webkit-box;
+display: -moz-box;
+display: -o-box;
+box-align:center;
+-webkit-box-align:center;
+-moz-box-align:center;
+-o-box-align:center;
+box-pack:center;
+-webkit-box-pack:center;
+-moz-box-pack:center;
+-o-box-pack:center;
+}
+
+h1{
+margin: 0px;
+padding: 0px;
+font-size: 24px;
+color: #232323;
+font-weight: normal 
+}
+
+.Userreg{
+width: 370px;
+padding-top: 20px;
+}
+
+.Userreg p{
+text-align: right;
+}
+
+ul{
+list-style: none;
+}
+
+.Userreg ul li{
+position: relative;
+min-height: 70px;
+}
+
+.Userreg ul li .ulLi{
+position: relative;
+width: 100%;
+text-align: right;
+}
+
+.Userreg ul li .ulLi span{
+height: 40px;
+font-size:14px;
+line-height: 40px;
+width: 20%;
+}
+
+input.phoneNumber{
+padding-left: 10px;
+width: 80%;
+height: 43px;
+border:#e1e1e1 solid 1px;
+font-size: 14px;
+border-radius: 3px;
+border-color:rgb(243, 105, 110);
+} 
+
+input.numberYz{
+position: relative;
+width: 40%;
+padding-left: 10px;
+height: 43px;
+border:#e1e1e1 solid 1px;
+font-size: 14px;
+border-radius: 3px;
+}
+
+input.getYz{
+position: relative;
+width: 40%;
+padding-left: 10px;
+height: 43px;
+border:#e1e1e1 solid 1px;
+font-size: 14px;
+border-radius: 3px;
+}
+
+#password{
+text-align: left
+}
+
+input.LogoPass{
+padding-left: 10px;
+width: 80%;
+height: 43px;
+border:#e1e1e1 solid 1px;
+font-size: 14px;
+border-radius: 3px;
+/* border-color:rgb(243, 105, 110); */
+}
+
+.msgError{
+text-align: left;
+margin-left:20%; 
+color: #f26522;
+margin-top:3px;
+font-size: 12px
+}
+
+input.ConFrimPass{
+padding-left: 10px;
+width: 80%;
+height: 43px;
+border:#e1e1e1 solid 1px;
+font-size: 14px;
+border-radius: 3px;
+/* border-color:rgb(243, 105, 110); */
+}
+
+.msgErrorConfirm{
+text-align: left;
+margin-left:20%; 
+color: #f26522;
+margin-top:3px;
+font-size: 12px
+}
+
+input.subReg{
+font-size: 18px;
+color:#fff;
+text-align: center;
+width: 165px;
+height: 36px;
+line-height: 32px;
+background: #ec008c;
+display: block;
+border: none;
+transition:all .2s ease-in-out;
+margin: 0 auto;
+}
+
+input.subReg:hover{
+background: #cf0767;
+}

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.modelgarden.model.mapper.user">
+
+	<resultMap id="userRole" type="UserRole">  
+        <id column="rid" property="rid" />  
+        <result column="type" property="rType" />  
+        <result column="name" property="rName" />  
+    </resultMap>  
+    
+    <resultMap id="imageInfo" type="ImageInfo">  
+        <id column="uid" property="uid" />  
+        <result column="createTime" property="createTime" />  
+        <result column="type" property="imgType" />  
+        <result column="location" property="uri" />
+    </resultMap>  
+  
+
+    <select id="selectUserByTelID" parameterType="String" resultType="BaseUser">
+        select * from `t_user` where id = #{telID}
+    </select>
+    
+     <insert id="addBaseUser" parameterType="BaseUser"> 
+        insert into t_user(id, registerTime, password, telephone, roleType) 
+        values(#{id}, #{registerTime}, #{password}, #{telephone}, #{roleType})  
+     </insert>
+     
+     <insert id="saveImage" parameterType="java.util.Map"> 
+        insert into t_user_img_space(uid, createTime, type, location) 
+        values(#{uid}, #{createTime}, #{type}, #{location})  
+     </insert>
+   
+     <select id="selectImagesByID" parameterType="String" resultMap="imageInfo">
+        select uid,
+               createTime,
+               type,
+               location 
+        from `t_user_img_space` 
+        where uid = #{userID}
+           and type = #{imgType}
+        order by createTime
+     </select>
+</mapper>

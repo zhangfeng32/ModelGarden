@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.modelgarden.model.mapper.model">
+
+     <insert id="updateModelInfo" parameterType="ModelInfo">
+	    INSERT INTO t_model
+		    (id, realName, nickName, identityID, birtyDay, age, sex, email, address,
+		     wechartID, alipayID, height, weight, chestCircle, waistCircle, buttCircle,
+		     shoeSize, interviewTravelFee, introducer)
+	    VALUES
+			   (#{uid}, #{realname}, #{nickname}, #{identityid}, #{birthDay}, #{age}, #{sex}, #{email}, #{address},
+			     #{wechartid}, #{alipayid}, #{height}, #{weight}, #{chestcircle}, #{waistcircle}, #{buttcircle}, 
+			     #{shoesize}, #{interviewtravelfee}, #{introducer}) 
+	    ON DUPLICATE KEY UPDATE
+			    realName=#{realname},
+			    nickName=#{nickname},
+			    identityID=#{identityid},
+			    birtyDay=#{birthDay},
+			    age=#{age},
+			    sex=#{sex},
+			    email=#{email},
+			    address=#{address},
+			    wechartID=#{wechartid},
+			    alipayID=#{alipayid},
+			    height=#{height},
+			    weight=#{weight},
+			    chestCircle=#{chestcircle},
+			    waistCircle=#{waistcircle},
+			    buttCircle=#{buttcircle},
+			    shoeSize=#{shoesize},
+			    interviewTravelFee=#{interviewtravelfee},
+			    introducer=#{introducer}
+	</insert>
+	
+	  <select id="selectModelByID" parameterType="String" resultType="ModelInfo">
+	        select 
+	        	id as uid,
+	        	realName as realname,
+			    nickName as nickname,
+			    identityID as identityid,
+			    birtyDay as birthDay,
+			    age as age,
+			    sex as sex,
+			    email as email,
+			    address as address,
+			    wechartID as wechartid,
+			    alipayID as alipayid,
+			    height as height,
+			    weight as weight,
+			    chestCircle as chestcircle,
+			    waistCircle as waistcircle,
+			    buttCircle as buttcircle,
+			    shoeSize as shoesize,
+			    interviewTravelFee as interviewtravelfee,
+			    introducer as introducer
+	        from `t_model` 
+	        where id = #{modelID}
+	   </select>
+   
+</mapper>

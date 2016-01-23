@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+
+    <typeAliases> 
+        <typeAlias alias="BaseUser" type="com.modelgarden.model.BaseUser"/> 
+        <typeAlias alias="UserRole" type="com.modelgarden.model.UserRole"/> 
+        <typeAlias alias="ModelInfo" type="com.modelgarden.model.ModelInfo"/> 
+        <typeAlias alias="ImageInfo" type="com.modelgarden.model.ImageInfo"/> 
+    </typeAliases> 
+	
+    
+    <mappers>
+        <mapper resource="mapper/User.xml"/>
+        <mapper resource="mapper/ModelInfo.xml"/>
+    </mappers>
+    
+</configuration>
